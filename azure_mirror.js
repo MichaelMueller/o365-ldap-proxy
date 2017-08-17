@@ -82,7 +82,7 @@ auth.getAccessToken().then(function (token) {
           attributes: {
             objectclass: ['groupOfUniqueNames'],
             cn: [config.allGroupName],
-            description: ["Grouap "+config.allGroupName],
+            description: ["Group "+config.allGroupName],
             uniqueMember: uniqueMembers
           }
       };
