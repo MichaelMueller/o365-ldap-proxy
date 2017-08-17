@@ -26,6 +26,7 @@ When the callee conducts a search
  * Create a service script as described here https://askubuntu.com/questions/351879/how-to-create-a-service-on-ubuntu-upstart
 
 ## Known issues/Limitations
-
+ * No SSL Support
+ 
 ## Acknowledgements
  * Code reused from https://github.com/microsoftgraph/nodejs-apponlytoken-rest-sample
