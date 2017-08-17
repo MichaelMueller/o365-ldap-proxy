@@ -56,15 +56,32 @@ server.bind(config.baseDn, function(req, res, next)
 });
 
 server.search(config.baseDn, function(req, res, next) {
-  console.log('Search started. Base object: ' + req.dn.toString() + '. Scope: ' + req.scope + '. Filter: ' + req.filter.toString());
+  var baseObj = req.dn.toString().replace(/ /g, ''); 
+  console.log('Search started. Base object: ' + baseObj + '. Scope: ' + req.scope + '. Filter: ' + req.filter.toString());
+  
   var tmp_data = JSON.parse(fs.readFileSync(config.dataFile, 'utf8'));
-
-  for (var i = 0; i < tmp_data.length; i++) 
+  if(baseObj == config.baseDn)
   {
-    if (req.filter.matches(tmp_data[i].attributes)) 
+    for (var i = 0; i < tmp_data.length; i++) 
     {
-      res.send(tmp_data[i]);
-    }
+      if( req.scope == "one" && tmp_data[i].dn == config.baseDn ) 
+        continue;
+      if (req.filter.matches(tmp_data[i].attributes)) 
+      {
+        res.send(tmp_data[i]);
+      }
+    }    
+  }
+  else
+  {
+    for (var i = 0; i < tmp_data.length; i++) 
+    {      
+      if( req.scope == "base" && tmp_data[i].dn == baseObj ) 
+      {
+        res.send(tmp_data[i]);
+        break;
+      }      
+    }    
   }
     
   res.end();
