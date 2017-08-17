@@ -3,8 +3,8 @@ o365-ldap-proxy is a tool for authenticating against Office 365 through a LDAP w
 
 ## How it works
 o365-ldap-proxy starts a custom LDAP server. When doing the bind, the program actually uses Microsoft Graph API to check the user credentials. 
-As a second tool the script azure_mirror.js uses the Graph API to retrieve all users of the Office 365 tenant and bringing them into a Generic LDAP Server schema.
-When the callee conducts a search
+As a second tool the script azure_mirror.js uses the Graph API to retrieve all users of the Office 365 Azure Active Directory.
+When the callee conducts a search on the o365-ldap-proxy server, this data will be used to reply with LDAP search results.
 
 ## Installation
  * Install NodeJS
