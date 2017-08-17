@@ -40,8 +40,21 @@ server.bind(config.baseDn, function(req, res, next)
   var username = req.dn.toString().replace(/ /g, '');    
   username = username.toLowerCase();
   username = username.replace(',' + config.baseDn.toLowerCase(), '');  
-  username = (username.replace('cn=', ''))+"@"+config.azureDomain;  
+  username = (username.replace('cn=', ''));
+  //console.log("user= "+username);
+  
   var pass = req.credentials;
+  if(config.authName && config.authName == username)
+  {
+    if(config.authPass != pass)
+      return next(new ldap.InvalidCredentialsError());
+    
+    console.log(username+" successfully authenticated");
+    res.end();
+    return next();
+  }
+  if(config.removeDomainFromCn)
+    username = username+"@"+config.azureDomain;  
   
   user_auth.checkUserNameAndPass(username, pass, function(err)
   {

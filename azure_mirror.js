@@ -30,7 +30,10 @@ console.log = function () {
 var auth = require('./auth');
 var graph = require('./graph');
 var config = require('./config');
+var Regex = require("regex");
 
+console.log("==================")
+console.log("Starting mirroring");
 // Get an access token for the app.
 auth.getAccessToken().then(function (token) {
   // Get all of the users in the tenant.
@@ -48,15 +51,37 @@ auth.getAccessToken().then(function (token) {
       };
       data.push(domainObj);
       
-      var uniqueMembers = [];
+      var uniqueMembers = [];      
+      
       for (var i = 0, len = users.length; i < len; i++) 
       {
         var graphObj = users[i];
         
-        if( config.skipUsersNotInAzureDomain && graphObj.userPrincipalName.indexOf(config.azureDomain) == -1 )
-          continue;
+        //if( config.skipUsersNotInAzureDomain && graphObj.userPrincipalName.indexOf(config.azureDomain) == -1 )
+          //continue;
+        if(config.excludeUsers)
+        {
+          var skip = false;
+          for (var k = 0, len2 = config.excludeUsers.length; k < len2; k++) 
+          {
+            if( graphObj.userPrincipalName.search(config.excludeUsers[k]) > -1 )
+            {
+              skip = true;
+              break;
+            }
+          }
+          
+          if(skip)
+          {            
+            console.log("Skipping "+ graphObj.userPrincipalName+" due to exclude rules" )
+            continue;          
+          }
+          
+        }
         
-        var myCn = (graphObj.userPrincipalName).replace("@"+config.azureDomain, '');
+        var myCn = (graphObj.userPrincipalName);
+        if(config.removeDomainFromCn)
+          myCn = myCn.replace("@"+config.azureDomain, '');
         var myDn = "cn=" + myCn + "," + config.baseDn;
         uniqueMembers.push(myDn);
         
@@ -87,6 +112,11 @@ auth.getAccessToken().then(function (token) {
           }
       };
       data.push(groupObj);
+      
+      for (var i = 0, len = config.includeUser.length; i < len; i++) 
+      {        
+        data.push(config.includeUser[i]);
+      }      
       
       const fs = require('fs');
       const content = JSON.stringify(data, null, 2);
