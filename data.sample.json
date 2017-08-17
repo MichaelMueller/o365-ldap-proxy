@@ -1,0 +1,57 @@
+[
+  {
+    dn: 'dc=contoso,dc=com',
+    attributes: {
+      objectclass: ['domain'],
+      dc: ['contoso']
+    }    
+  },
+  {
+    dn: 'cn=all,dc=contoso,dc=com',
+    attributes: {
+      objectclass: ['groupOfUniqueNames'],
+      cn: ['all'],
+      description: ['all'],
+      uniqueMember: ['cn=doe,dc=contoso,dc=com', 'cn=miller,dc=contoso,dc=com', 'cn=smith,dc=contoso,dc=com']
+    }    
+  },  
+  {
+    dn: 'cn=doe,dc=contoso,dc=com',
+    attributes: {
+      objectclass: ['inetorgperson'],
+      cn: ['doe'],
+      entryUUID: ['doe'],
+      givenName: ['john'],
+      sn: ['doe'],
+      displayName: ['john doe'],
+      mail: ['doe@contoso.info'],
+      userPassword: ['userPassword']
+    }
+  },
+  {
+    dn: 'cn=miller,dc=contoso,dc=com',
+    attributes: {
+      objectclass: ['inetorgperson'],
+      cn: ['miller'],
+      entryUUID: ['miller'],
+      givenName: ['jack'],
+      sn: ['miller'],
+      displayName: ['jack miller'],
+      mail: ['miller@contoso.info'],
+      userPassword: ['userPassword']
+    }
+  },
+  {
+    dn: 'cn=smith,dc=contoso,dc=com',
+    attributes: {
+      objectclass: ['inetorgperson'],
+      cn: ['smith'],
+      entryUUID: ['smith'],
+      givenName: ['jane'],
+      sn: ['smith'],
+      displayName: ['jane smith'],
+      mail: ['smith@contoso.info'],
+      userPassword: ['userPassword']
+    }
+  } 
+];

@@ -30,7 +30,7 @@ console.log = function () {
 var ldap = require('ldapjs');
 var config = require('./config');
 var user_auth = require('./user_auth');
-var tmp_data = require('./tmp_data');
+var fs = require('fs');
 
 var server = ldap.createServer();
 
@@ -57,6 +57,7 @@ server.bind(config.baseDn, function(req, res, next)
 
 server.search(config.baseDn, function(req, res, next) {
   console.log('Search started. Base object: ' + req.dn.toString() + '. Scope: ' + req.scope + '. Filter: ' + req.filter.toString());
+  var tmp_data = JSON.parse(fs.readFileSync(config.dataFile, 'utf8'));
 
   for (var i = 0; i < tmp_data.length; i++) 
   {

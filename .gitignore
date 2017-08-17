@@ -1,4 +1,5 @@
 config.js
+data.json
 o365-ldap-proxy
 node_modules
 tmp*

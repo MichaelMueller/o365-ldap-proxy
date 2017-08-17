@@ -27,16 +27,80 @@ console.log = function () {
 };
 //=======================================
 
+var auth = require('./auth');
+var graph = require('./graph');
 var config = require('./config');
-var GraphAPI = require('azure-graphapi');
- 
-var graph = new GraphAPI(config.azureDomain, config.clientId, config.clientSecret);
-graph.get('users', function(err, users) {
-    if (!err) {
-      console.dir(users)
-    }
-    else
-    {
-      console.log("failed: "+err.toString());    
-    }
+
+// Get an access token for the app.
+auth.getAccessToken().then(function (token) {
+  // Get all of the users in the tenant.
+  graph.getUsers(token)
+    .then(function (users) {
+      var data = [];      
+      
+      var domainDc = config.baseDn.substring(0, config.baseDn.indexOf(","));
+      var domainObj = {
+          dn: config.baseDn,
+          attributes: {
+            objectclass: ['domain'],
+            dc: [domainDc]
+          }
+      };
+      data.push(domainObj);
+      
+      var uniqueMembers = [];
+      for (var i = 0, len = users.length; i < len; i++) 
+      {
+        var graphObj = users[i];
+        
+        if( config.skipUsersNotInAzureDomain && graphObj.userPrincipalName.indexOf(config.azureDomain) == -1 )
+          continue;
+        
+        var myCn = (graphObj.userPrincipalName).replace("@"+config.azureDomain, '');
+        var myDn = "cn=" + myCn + "," + config.baseDn;
+        uniqueMembers.push(myDn);
+        
+        var ldapObj = {
+          dn: myDn,
+          attributes: {
+            objectclass: ['inetorgperson'],
+            cn: [myCn],
+            entryUUID: [graphObj.id],
+            givenName: [graphObj.givenName],
+            sn: [graphObj.surname],
+            displayName: [graphObj.displayName],
+            mail: [graphObj.mail],
+            userPassword: ['empty']
+          }
+        };
+        data.push(ldapObj);
+      }
+      
+      // add group for all
+      var groupObj = {
+          dn: "cn=" + config.allGroupName + "," + config.baseDn,
+          attributes: {
+            objectclass: ['groupOfUniqueNames'],
+            cn: [config.allGroupName],
+            description: ["Grouap "+config.allGroupName],
+            uniqueMember: uniqueMembers
+          }
+      };
+      data.push(groupObj);
+      
+      const fs = require('fs');
+      const content = JSON.stringify(data, null, 2);
+
+      fs.writeFile(config.dataFile, content, 'utf8', function (err) {
+          if (err) {
+              return console.log(err);
+          }
+          console.log("Mirror file was saved!");
+      }); 
+      
+    }, function (error) {
+      console.error('>>> Error getting users: ' + error);
+    });
+}, function (error) {
+  console.error('>>> Error getting access token: ' + error);
 });
