@@ -11,8 +11,6 @@
   "dependencies": {
     "ldapjs": "1.0.1",
     "azure-graph": "2.1.0-preview",
-    "chalk": "^1.1.1",
-    "q": "^1.4.1",    
-    "request": "^2.67.0"
+    "azure-graphapi": "0.1.0"
   }
 }
