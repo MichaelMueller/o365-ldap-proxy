@@ -1,8 +1,10 @@
 var ldap = require('ldapjs');
+var config = require('./config');
 
 var server = ldap.createServer();
 
-server.bind('cn=root', function(req, res, next) {
+server.bind('cn=root', function(req, res, next) 
+{
   if (req.dn.toString() !== 'cn=root' || req.credentials !== 'secret')
     return next(new ldap.InvalidCredentialsError());
 
@@ -23,8 +25,10 @@ server.search('o=example', function(req, res, next) {
     }
   };
 	res.send(obj);
+    
   res.end();
 });
-server.listen(1389, function() {
+
+server.listen(config.port, function() {
   console.log('/etc/passwd LDAP server up at: %s', server.url);
 });

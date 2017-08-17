@@ -1,0 +1,18 @@
+{
+  "name": "o365-ldap-proxy",
+  "version": "1.0.0",
+  "description": "o365-ldap-proxy",
+  "main": "server.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MichaelMueller/o365-ldap-proxy.git"
+  },
+  "dependencies": {
+    "ldapjs": "1.0.1",
+    "azure-graph": "2.1.0-preview",
+    "chalk": "^1.1.1",
+    "q": "^1.4.1",    
+    "request": "^2.67.0"
+  }
+}
