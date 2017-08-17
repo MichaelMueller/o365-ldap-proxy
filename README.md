@@ -8,3 +8,6 @@ An LDAP proxy for on premise applications that want to authenticate through offi
 
 thanks to:
 https://github.com/microsoftgraph/nodejs-apponlytoken-rest-sample
+
+misc:
+update nodejs on ubuntu: https://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version
