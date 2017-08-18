@@ -20,10 +20,13 @@ module.exports = {
   allGroupName: "all",
   // where the sync file will be saved
   dataFile: "./data.json",
+  // a cron expression for scheduling the mirroring
+  mirrorScheduleCronExpression: "0,30 * * * *",
   // specify array with users to exclude (substrings may be used)
   excludeUsers: null,
   // add users (see data.sample.json)
   includeUser: [],
+  // set to true to remove the domain from the logins and the synced data, e.g. "user@contoso.com" will just be "user"
   removeDomainFromCn: false,
   // if authname and authpass are set, these credentials may also be used for doing a simple bind
   authName: null,

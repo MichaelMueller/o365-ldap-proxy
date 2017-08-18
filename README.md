@@ -13,10 +13,8 @@ When the callee conducts a search on the o365-ldap-proxy server, this data will 
 ## Configuration
  * Create an Application in Azure as described here: https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-integrating-applications 
  * Copy config.sample.js to config.js and make configuration changes
- * Start the first mirroring by invoking "node azure_mirror.js"
- * Start the server using "npm start" or "node server.js"
+ * Start the server using "npm start" or "node server.js" (the mirroring is automatically scheduled by the server)
  * Create a service for the server on your system
- * Install a cronjob for doing the mirroring, e.g. every hour "node azure_mirror.js" should be invoked
 
 ### Complete setup on Ubuntu 
  * Run sudo-apt get install nodejs
@@ -27,6 +25,7 @@ When the callee conducts a search on the o365-ldap-proxy server, this data will 
 
 ## Known issues/Limitations
  * No SSL Support
+ * Not much error checking, be cautious when doing the config
  
 ## Acknowledgements
  * Code reused from https://github.com/microsoftgraph/nodejs-apponlytoken-rest-sample

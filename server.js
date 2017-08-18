@@ -1,29 +1,9 @@
+var util = require('./util');
 var log = console.log;
 console.log = function () {
     var first_parameter = arguments[0];
     var other_parameters = Array.prototype.slice.call(arguments, 1);
-
-    function formatConsoleDate (date) {
-        var day = date.getDate();
-        var month = date.getMonth()+1;
-        var year = date.getFullYear();
-        var hour = date.getHours();
-        var minutes = date.getMinutes();
-        var seconds = date.getSeconds();
-        var milliseconds = date.getMilliseconds();
-
-        return '[' + year + "/" + month + "/" + day + " " +
-               ((hour < 10) ? '0' + hour: hour) +
-               ':' +
-               ((minutes < 10) ? '0' + minutes: minutes) +
-               ':' +
-               ((seconds < 10) ? '0' + seconds: seconds) +
-               '.' +
-               ('00' + milliseconds).slice(-3) +
-               '] ';
-    }
-
-    log.apply(console, [formatConsoleDate(new Date()) + first_parameter].concat(other_parameters));
+    log.apply(console, [util.formatConsoleDate(new Date()) + first_parameter].concat(other_parameters));
 };
 //=======================================
 
@@ -31,6 +11,26 @@ var ldap = require('ldapjs');
 var config = require('./config');
 var user_auth = require('./user_auth');
 var fs = require('fs');
+var azure_mirror_do = require('./azure_mirror_do');
+
+if (!fs.existsSync(config.dataFile)) 
+{
+  console.log("Initial mirroring necessary. Running now");   
+  azure_mirror_do.run();
+}
+if( config.mirrorScheduleCronExpression )
+{  
+  console.log("Configuring scheduler using cron rule "+config.mirrorScheduleCronExpression);   
+  var schedule = require('node-schedule'); 
+  var j = schedule.scheduleJob(config.mirrorScheduleCronExpression, function(){
+    console.log("************** Starting scheduled mirroring");
+    azure_mirror_do.run();
+  });
+}
+else
+{  
+  console.log("Scheduler is disabled");   
+}
 
 var server = ldap.createServer();
 
