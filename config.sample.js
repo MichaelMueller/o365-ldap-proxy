@@ -9,7 +9,7 @@ module.exports = {
   clientSecret: 'ENTER_YOUR_SECRET',
   tokenEndpoint: 'ENTER_YOUR_TOKEN_ISSUING_ENDPOINT'
   // port of the ldap server
-  port: 1389,
+  port: 389,
   // From the Azure Portal, if you click on the Help icon in the upper right and then choose 'Show Diagnostics' you can find the tenant id in the diagnostic JSON.
   tenantId: "a333cd5f-e917-488a-9ab4-007a2217387b",
   // the simulated base dn (e.g. DC=contoso,DC=com)
@@ -28,7 +28,8 @@ module.exports = {
   includeUser: [],
   // set to true to remove the domain from the logins and the synced data, e.g. "user@contoso.com" will just be "user"
   removeDomainFromCn: false,
-  // if authname and authpass are set, these credentials may also be used for doing a simple bind
-  authName: null,
-  authPass: null
+  // set to true if you want to allow anonymous binds
+  enableAnonymousLogin: false,
+  // organization name for the RootDSE
+  orgName: "contoso"
 };

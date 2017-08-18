@@ -14,6 +14,7 @@
     "chalk": "^1.1.1",
     "q": "^1.4.1",
     "request": "^2.67.0",
-    "node-schedule": "1.2.4"
+    "node-schedule": "1.2.4",
+    "hashcode": "1.0.3"
   }
 }

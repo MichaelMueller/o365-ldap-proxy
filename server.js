@@ -37,35 +37,53 @@ var server = ldap.createServer();
 
 server.bind(config.baseDn, function(req, res, next) 
 {
-  var username = req.dn.toString().replace(/ /g, '');    
-  username = username.toLowerCase();
-  username = username.replace(',' + config.baseDn.toLowerCase(), '');  
-  username = (username.replace('cn=', ''));
-  //console.log("user= "+username);
+  var username = req.dn.toString().replace(/ /g, '');
+  // anonymous bind
+  if(username == "" && config.enableAnonymousLogin == true)
+    return next();
+  
+  // dn bind
+  if( (username).indexOf(config.baseDn.toLowerCase()) !== -1)
+  {  
+    username = username.replace(',' + config.baseDn.toLowerCase(), '');  
+    username = username.substr(username.indexOf("=")+1);
+  }
+  if(!config.removeDomainFromCn)
+    username = username+"@"+config.azureDomain;  
   
   var pass = req.credentials;
-  if(config.authName && config.authName == username)
-  {
-    if(config.authPass != pass)
-      return next(new ldap.InvalidCredentialsError());
-    
-    console.log(username+" successfully authenticated");
-    res.end();
-    return next();
-  }
-  if(config.removeDomainFromCn)
-    username = username+"@"+config.azureDomain;  
   
   user_auth.checkUserNameAndPass(username, pass, function(err)
   {
     if(err)
-      return next(new ldap.InvalidCredentialsError());
+    {      
+      console.log(username+" failed login");            
+
+      return next(new ldap.InvalidCredentialsError());    
+    }
     
     console.log(username+" successfully authenticated");
     res.end();
     return next();
   });
 
+});
+
+server.search("", function(req, res, next) {
+  var baseObj = req.dn.toString().replace(/ /g, ''); 
+  console.log('RootDSE started. Base object: ' + baseObj + '. Scope: ' + req.scope + '. Filter: ' + req.filter.toString());
+  
+  var tmp_data = JSON.parse(fs.readFileSync(config.dataFile, 'utf8'));  
+  for (var i = 0; i < tmp_data.length; i++) 
+  {
+    if( req.scope == "one" && tmp_data[i].dn == config.baseDn ) 
+      continue;
+    if (req.filter.matches(tmp_data[i].attributes)) 
+    {
+      res.send(tmp_data[i]);
+    }
+  }
+  res.end();
 });
 
 server.search(config.baseDn, function(req, res, next) {
