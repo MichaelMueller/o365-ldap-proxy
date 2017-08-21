@@ -33,11 +33,12 @@ azure_mirror_do.getAllGroupObject = function(allGroupId, memberUids, uniqueMembe
   var groupObj = {
       dn: "cn=" + config.allGroupName + "," + config.baseDn,
       attributes: {
-        objectclass: ['groupOfUniqueNames', 'posixgroup', 'top'],
+        objectclass: ['groupOfUniqueNames', 'posixgroup', 'top', 'sambaGroupMapping'],
         cn: config.allGroupName,
         gidNumber: allGroupId,
         description: "Group "+config.allGroupName,              
         entryuuid: "4637e56a-186f-1037-8a8a-23e38af4fd13",
+	"sambaSID": "S-1-5-21-"+allGroupId,
         memberuid: memberUids,
         uniqueMember: uniqueMembers,                         
         structuralObjectClass: "posixGroup",
@@ -52,13 +53,13 @@ azure_mirror_do.getUserObject = function(graphObj, allGroupId) {
   if(config.removeDomainFromCn)
     uid = uid.replace("@"+config.azureDomain, '');
   var myCn = graphObj.displayName;
-  var myDn = "cn=" + myCn + "," + config.baseDn;
+  var myDn = "uid=" + uid + "," + config.baseDn;
   var hash = Math.abs(encode().value( graphObj.id )); 
   
   var ldapObj = {
     dn: myDn,
     attributes: {
-      objectclass: ['inetorgperson', 'posixaccount', 'top', 'shadowAccount', 'person'],
+      objectclass: ['inetorgperson', 'posixaccount', 'top', 'shadowAccount', 'person', 'sambaSamAccount'],
       cn: graphObj.displayName,
       entryuuid: graphObj.id,
       gidNumber: allGroupId,      
@@ -67,6 +68,7 @@ azure_mirror_do.getUserObject = function(graphObj, allGroupId) {
       displayName: graphObj.displayName,
       mail: graphObj.mail,
       "uid": uid,
+      "sambaSID": "S-1-5-21-"+hash,
       uidNumber: hash,
       userPassword: hash,
       homeDirectory: "/home/"+uid,

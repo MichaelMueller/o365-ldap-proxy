@@ -48,7 +48,7 @@ server.bind(config.baseDn, function(req, res, next)
     username = username.replace(',' + config.baseDn.toLowerCase(), '');  
     username = username.substr(username.indexOf("=")+1);
   }
-  if(!config.removeDomainFromCn)
+  if(config.removeDomainFromCn == true)
     username = username+"@"+config.azureDomain;  
   
   var pass = req.credentials;
