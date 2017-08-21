@@ -52,7 +52,7 @@ azure_mirror_do.getUserObject = function(graphObj, allGroupId) {
   if(config.removeDomainFromCn)
     uid = uid.replace("@"+config.azureDomain, '');
   var myCn = graphObj.displayName;
-  var myDn = "cn=" + myCn + "," + config.baseDn;
+  var myDn = "uid=" + uid + "," + config.baseDn;
   var hash = Math.abs(encode().value( graphObj.id )); 
   
   var ldapObj = {
