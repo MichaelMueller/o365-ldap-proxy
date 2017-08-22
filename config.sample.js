@@ -32,6 +32,100 @@ var config = {
 // update the db in this plugin function
 config.updateDatabase = function(graphUsers, db)
 {
+  console.log("Updating database");
+  var usersGroupGroupDn = "cn=users,cn=groups,dc=contoso,dc=com";
+  var usersGroup = db[usersGroupGroupDn];
+    //console.dir(usersGroup);
+  var sambaDomain = db["sambadomainname=contoso,dc=contoso,dc=com"];
+  var member = [];
+  var memberUid = [];
+  
+  for (var i = 0, len = graphUsers.length; i < len; i++) 
+  {
+    var graphObj = graphUsers[i];
+    var uid = graphObj["userPrincipalName"];
+    var hash = Math.abs(encode().value( graphObj.id )).toString(); 
+    var userDn = config.userRdn+"="+uid+","+config.usersDnSuffix;
+    var sambaNtPass = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+    var userAtts = db[userDn];
+    if(userAtts && userAtts.hasOwnProperty("sambaNTPassword"))
+    {    
+      sambaNtPass = userAtts["sambaNTPassword"];
+    }
+    
+    var attributes = {
+      "objectClass": [
+        "extensibleObject",
+        "sambaIdmapEntry",
+        "sambaSamAccount",
+        "apple-user",
+        "inetOrgPerson",
+        "organizationalPerson",
+        "person",
+        "shadowAccount",
+        "posixAccount",
+        "top"
+      ],
+      "cn": uid,
+      "gidNumber": usersGroup["gidNumber"],
+      "homeDirectory": "/home/"+uid,
+      "sambaSID": sambaDomain.sambaSID+"-"+hash,
+      "sn": graphObj.surname,
+      "uid": uid,
+      "uidNumber": hash,
+      "apple-generateduid": graphObj.id,
+      "authAuthority": ";basic;",
+      "displayName": graphObj.displayName,
+      "loginShell": "/bin/sh",
+      "mail": graphObj.mail,
+      "memberOf": usersGroupGroupDn,
+      "sambaAcctFlags": "[U          ]",
+      "sambaLMPassword": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "sambaNTPassword": sambaNtPass,
+      "sambaPasswordHistory": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sambaPwdLastSet": "1503321620",
+      "shadowExpire": "-1",
+      "shadowFlag": "0",
+      "shadowInactive": "0",
+      "shadowLastChange": "17399",
+      "shadowMax": "99999",
+      "shadowMin": "100000",
+      "shadowWarning": "7",
+      "createTimestamp": "20170820070521Z",
+      "creatorsName": "uid=admin,cn=users,dc=contoso,dc=com",
+      "entryCSN": "20170821132021.008850Z#000000#000#000000",
+      "entryDN": userDn,
+      "entryUUID": graphObj.id,
+      "hasSubordinates": "FALSE",
+      "modifiersName": "uid=admin,cn=users,dc=contoso,dc=com",
+      "modifyTimestamp": "20170821132021Z",
+      "pwdChangedTime": "20170821132021Z",
+      "structuralObjectClass": "inetOrgPerson",
+      "subschemaSubentry": "cn=Subschema",
+      "gecos": "Default User",
+    }
+    
+    console.log("Inserting user "+uid);
+    db[userDn] = attributes;
+    member.push(userDn);
+    memberUid.push(uid);
+  }
+    
+  console.log("Updating user group "+usersGroupGroupDn);
+  var prevMembers = usersGroup["member"];
+  for (var i = 0, len = prevMembers.length; i < len; i++) 
+  {
+    var prevMember = prevMembers[i];
+    if(member.indexOf(prevMember) == -1)
+    {
+      console.log("!!!!! Deleting member "+prevMember);
+      delete db[prevMember];
+    }
+  }
+  usersGroup["member"] = member;
+  usersGroup["memberUid"] = memberUid;
+  db[usersGroupGroupDn] = usersGroup;
+  
   return db;
 } 
 
