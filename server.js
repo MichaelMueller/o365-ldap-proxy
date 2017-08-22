@@ -81,7 +81,7 @@ server.bind(SUFFIX, function(req, res, next) {
   
   // dn bind
   theDn = theDn.replace(config.userRdn+"=",'');
-  theDn = theDn.replace(","+config.usersGroupDn,'');
+  theDn = theDn.replace(","+config.usersDnSuffix,'');
   username = theDn;
   if(config.removeDomainFromCn == true)
     username = username+"@"+config.azureDomain;
@@ -95,7 +95,7 @@ server.bind(SUFFIX, function(req, res, next) {
       return next(new ldap.InvalidCredentialsError());    
     }
     loadDbIfNecessary();
-    theDn = config.userRdn+"="+theDn+","+config.usersGroupDn;
+    theDn = config.userRdn+"="+theDn+","+config.usersDnSuffix;
     var userAtts = db[theDn];
     if(userAtts && userAtts.hasOwnProperty("sambaNTPassword"))
     {    
