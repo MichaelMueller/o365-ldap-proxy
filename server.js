@@ -71,7 +71,9 @@ server.bind(config.baseDn, function(req, res, next)
 
 server.search("", function(req, res, next) {
   var baseObj = req.dn.toString().replace(/ /g, ''); 
-  console.log('RootDSE started. Base object: ' + baseObj + '. Scope: ' + req.scope + '. Filter: ' + req.filter.toString());
+  if(req.hasOwnProperty("attributes"))
+    attStr = req.attributes.toString();
+  console.log('Search started. Base object: ' + baseObj + '. Scope: ' + req.scope + '. Filter: ' + req.filter.toString() + ' Attributes: ' + attStr); 
   
   var tmp_data = JSON.parse(fs.readFileSync(config.dataFile, 'utf8'));  
   for (var i = 0; i < tmp_data.length; i++) 
@@ -88,7 +90,9 @@ server.search("", function(req, res, next) {
 
 server.search(config.baseDn, function(req, res, next) {
   var baseObj = req.dn.toString().replace(/ /g, ''); 
-  console.log('Search started. Base object: ' + baseObj + '. Scope: ' + req.scope + '. Filter: ' + req.filter.toString());
+  if(req.hasOwnProperty("attributes"))
+    attStr = req.attributes.toString();
+  console.log('Search started. Base object: ' + baseObj + '. Scope: ' + req.scope + '. Filter: ' + req.filter.toString() + ' Attributes: ' + attStr);  
   
   var tmp_data = JSON.parse(fs.readFileSync(config.dataFile, 'utf8'));
   if(baseObj == config.baseDn)
