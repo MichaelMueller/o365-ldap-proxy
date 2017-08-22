@@ -36,7 +36,7 @@ function loadDbIfNecessary()
 {
   var stats = fs.statSync(config.dataFile);
   var mtime = stats.mtime;
-    console.log("Checking if database is outdated. lastModTime: "+lastModTime.toString()+", mtime: "+mtime.toString());
+    //console.log("Checking if database is outdated. lastModTime: "+lastModTime.toString()+", mtime: "+mtime.toString());
   if(mtime > lastModTime)
   {
     console.log("Database outdated. Rereading from "+config.dataFile);
