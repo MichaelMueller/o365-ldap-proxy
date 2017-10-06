@@ -85,7 +85,7 @@ server.bind(SUFFIX, function(req, res, next) {
   theDn = theDn.replace(config.userRdn+"=",'');
   theDn = theDn.replace(","+config.usersDnSuffix,'');
   username = theDn;
-  if(config.removeDomainFromCn == true)
+  if(config.removeDomainFromCn == true && username.indexOf("@") == -1)
     username = username+"@"+config.azureDomain;
   
   var pass = req.credentials;  
