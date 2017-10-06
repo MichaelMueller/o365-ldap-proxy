@@ -9,14 +9,14 @@
     "url": "https://github.com/MichaelMueller/o365-ldap-proxy.git"
   },
   "dependencies": {
-    "ldapjs": "1.0.1",
     "azure-graph": "2.1.0-preview",
     "chalk": "^1.1.1",
+    "hashcode": "1.0.3",
+    "ldapjs": "1.0.1",
+    "ldif": "^0.5.1",
+    "node-schedule": "1.2.4",
     "q": "^1.4.1",
     "request": "^2.67.0",
-    "node-schedule": "1.2.4",
-    "hashcode": "1.0.3",
-    "ldif": "0.5.1",
     "smbhash": "0.0.1"
   }
 }

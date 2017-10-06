@@ -12,6 +12,7 @@ var config = require('./config');
 var user_auth = require('./user_auth');
 var fs = require('fs'); 
 var schedule = require('node-schedule'); 
+var azure_mirror_do = require('./azure_mirror_do'); 
 var nthash = require('smbhash').nthash;
 
 ///--- Globals

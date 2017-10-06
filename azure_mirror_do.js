@@ -42,6 +42,8 @@ azure_mirror_do.run = function ()
         }
         graphUsers.push(graphObj);                 
       }
+      console.log("trying to read from "+config.dataFile);
+
       var db = JSON.parse(fs.readFileSync(config.dataFile, 'utf8'));
       db = config.updateDatabase(graphUsers, db);
       const content = JSON.stringify(db, null, 2);
