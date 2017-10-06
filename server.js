@@ -10,6 +10,7 @@ console.log = function () {
 var ldap = require('ldapjs');
 var config = require('./config');
 var user_auth = require('./user_auth');
+var azure_mirror_do = require('./azure_mirror_do');
 var fs = require('fs'); 
 var schedule = require('node-schedule'); 
 var azure_mirror_do = require('./azure_mirror_do'); 
