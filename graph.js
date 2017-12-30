@@ -21,7 +21,9 @@ graph.getUsers = function (token) {
       bearer: token
     }
   }, function (err, response, body) {
-    var parsedBody = JSON.parse(body);
+    
+    if(!err && body)	{
+      var parsedBody = JSON.parse(body);}
 
     if (err) {
       deferred.reject(err);

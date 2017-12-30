@@ -61,7 +61,13 @@ else
   console.log("Configuring scheduler using cron rule "+config.mirrorScheduleCronExpression);  
   var j = schedule.scheduleJob(config.mirrorScheduleCronExpression, function(){
     console.log("************** Starting scheduled mirroring");
-    azure_mirror_do.run();
+    try
+    {	
+      azure_mirror_do.run();
+    }
+    catch(e) {
+      console.log("exception caught in azure mirroring: "+e);
+    }
   });
 }
   
