@@ -1,4 +1,4 @@
-var config = require('./config');
+var config = require('./var/config');
 var msRestAzure = require('ms-rest-azure');
 
 // Enter your tenant ID here which can be found from your Azure AD URL 

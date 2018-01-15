@@ -1,6 +1,6 @@
 var auth = require('./auth');
 var graph = require('./graph');
-var config = require('./config');
+var config = require('./var/config');
 var fs = require('fs'); 
 
 var azure_mirror_do = {};

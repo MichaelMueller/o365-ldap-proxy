@@ -5,7 +5,7 @@
 
 var request = require('request');
 var Q = require('q');
-var config = require('./config');
+var config = require('./var/config');
 
 // The auth module object.
 var auth = {};

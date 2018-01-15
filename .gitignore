@@ -1,7 +1,5 @@
-config.js
-data.json
+var/*
 node_modules
 tmp*
 package-lock.json
 npm-shrinkwrap.json
-schemaData.json

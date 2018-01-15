@@ -16,7 +16,9 @@ var config = {
   // there will be one group named "all" containing all users, change the name here if wanted
   allGroupName: "all",
   // where the sync file will be saved
-  dataFile: "./data.json",
+  dataFile: "var/data.json",
+  // where the sync file will be saved
+  schemaDataFile: "var/schemaData.json",
   // a cron expression for scheduling the mirroring
   mirrorScheduleCronExpression: "0,30 * * * *",
   // specify array with users to exclude (substrings may be used)

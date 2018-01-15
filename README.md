@@ -11,9 +11,9 @@ As a second tool the script azure_mirror.js uses the Graph API to retrieve all u
  
 ## Configuration
  * Create an Application in Azure as described here: https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-integrating-applications 
- * Copy "data.sample.json" to "data.json" and provide the initial ldap data
- * Copy "schemaData.sample.json" to "schemaData.json" and provide the initial ldap schema. the default is a Synolody Directory Service
- * Copy "config.sample.js" to "config.js" and make configuration changes. Pay special caution to the function updateDatabase(). The updating of your database by mirror office 365 has to be done by yourself
+ * Copy "data.sample.json" to "var/data.json" and provide the initial ldap data
+ * Copy "schemaData.sample.json" to "var/schemaData.json" and provide the initial ldap schema. the default is a Synolody Directory Service
+ * Copy "config.sample.js" to "var/config.js" and make configuration changes. Pay special caution to the function updateDatabase(). The updating of your database by mirror office 365 has to be done by yourself
  * Start the server using "npm start" or "node server.js" (the mirroring is automatically scheduled by the server)
  * Create a service for the server on your system
 
